@@ -770,6 +770,15 @@ public class WheelData {
         return mVoltageSag / 100.0;
     }
 
+    public double getAvgVoltagePerCellSag() {
+        var adapter = getAdapter();
+        if (adapter == null) {
+            return 0.0;
+        }
+        var cells = Math.max(1, adapter.getCellsForWheel());
+        return mVoltageSag / (cells * 100.0);
+    }
+
     public double getPowerDouble() {
         return mPower / 100.0;
     }
