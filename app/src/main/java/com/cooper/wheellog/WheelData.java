@@ -766,7 +766,7 @@ public class WheelData {
         mVoltage = voltage;
     }
 
-    double getVoltageSagDouble() {
+    public double getVoltageSagDouble() {
         return mVoltageSag / 100.0;
     }
 
