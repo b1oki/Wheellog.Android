@@ -94,6 +94,8 @@ public class WheelData {
     private long mStartTotalDistance;
 
     private double mCalculatedPwm = 0.0;
+    private double mSoftwarePwm = 0.0;
+    private double mSoftwareMaxPwm = 0.0;
     private double mMaxPwm = 0.0;
     private long mLowSpeedMusicTime = 0;
 
@@ -766,8 +768,17 @@ public class WheelData {
         mVoltage = voltage;
     }
 
-    double getVoltageSagDouble() {
+    public double getVoltageSagDouble() {
         return mVoltageSag / 100.0;
+    }
+
+    public double getAvgVoltagePerCellSag() {
+        var adapter = getAdapter();
+        if (adapter == null) {
+            return 0.0;
+        }
+        var cells = Math.max(1, adapter.getCellsForWheel());
+        return mVoltageSag / (cells * 100.0);
     }
 
     public double getPowerDouble() {
@@ -816,9 +827,15 @@ public class WheelData {
     public double getCalculatedPwm() {
         return mCalculatedPwm * 100.0;
     }
+    public double getSoftwarePwm() {
+        return mSoftwarePwm * 100.0;
+    }
 
     public double getMaxPwm() {
         return mMaxPwm * 100.0;
+    }
+    public double getSoftwareMaxPwm() {
+        return mSoftwareMaxPwm * 100.0;
     }
 
     public int getTopSpeed() {
@@ -873,6 +890,7 @@ public class WheelData {
     public void resetMaxValues() {
         mTopSpeed = 0;
         mMaxPwm = 0;
+        mSoftwareMaxPwm = 0;
         mMaxCurrent = 0;
         mMaxPower = 0;
     }
@@ -976,6 +994,10 @@ public class WheelData {
             mMaxPwm = currentPwm;
 
     }
+    public void setSoftwareMaxPwm(double currentPwm) {
+        if ((currentPwm > mSoftwareMaxPwm) && (currentPwm > 0))
+            mSoftwareMaxPwm = currentPwm;
+    }
 
     public void setMaxTemp(int temp) {
         if ((temp > mMaxTemp) && (temp > 0))
@@ -1022,6 +1044,12 @@ public class WheelData {
         setMaxTemp(mTemperature);
         if ((mWheelType == WHEEL_TYPE.KINGSONG) || (mWheelType == WHEEL_TYPE.INMOTION_V2) || WheelLog.AppConfig.getHwPwm()) {
             mCalculatedPwm = (double) mOutput / 10000.0;
+            // Для отладки сравниваем с другим PWM
+            double rotationSpeed = WheelLog.AppConfig.getRotationSpeed() / 10d;
+            double rotationVoltage = WheelLog.AppConfig.getRotationVoltage() / 10d;
+            double powerFactor = WheelLog.AppConfig.getPowerFactor() / 100d;
+            mSoftwarePwm = mSpeed / (rotationSpeed / rotationVoltage * mVoltage * powerFactor);
+            setSoftwareMaxPwm(mSoftwarePwm);
         } else {
             double rotationSpeed = WheelLog.AppConfig.getRotationSpeed() / 10d;
             double rotationVoltage = WheelLog.AppConfig.getRotationVoltage() / 10d;

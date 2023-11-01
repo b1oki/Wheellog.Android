@@ -122,7 +122,7 @@ object SomeUtil {
             }
         } else {
             // default beep
-            playSound(context, R.raw.beep)
+            playSound(context, R.raw.spin4ev_kolokol4iki)
         }
     }
 

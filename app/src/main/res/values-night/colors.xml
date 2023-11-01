@@ -19,8 +19,8 @@
     <color name="wheelview_speed_text">#FFFFFF</color>
     <color name="wheelview_main_positive_dial">#A80909</color>
     <color name="wheelview_main_negative_dial">#209100</color>
-    <color name="wheelview_battery_dial">#01BF50</color>
-    <color name="wheelview_battery_low_dial">#ffcc00</color>
+    <color name="wheelview_battery_dial">#017833</color>
+    <color name="wheelview_battery_low_dial">#8F7300</color>
     <color name="wheelview_temperature_dial">#00ffff</color>
     <color name="wheelview_arc_dim">#070A10</color>
     <color name="alert_bg">#F2F2F2</color>

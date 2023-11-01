@@ -672,13 +672,22 @@ class WheelView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         textPaint.textSize = speedTextSize
         canvas.drawText(speedString, outerArcRect.centerX(), speedTextRect.centerY() + speedTextRect.height() / 2f, textPaint)
         textPaint.textSize = speedTextKPHSize
-        textPaint.color = getColorEx(R.color.wheelview_text)
+        textPaint.color = getColorEx(R.color.wheelview_speed_text)
         if (WheelLog.AppConfig.useShortPwm || isInEditMode) {
             val pwm = String.format("%02.0f%% / %02.0f%%",
                     WheelData.getInstance().calculatedPwm,
                     WheelData.getInstance().maxPwm)
             textPaint.textSize = speedTextKPHSize * 1.2f
             canvas.drawText(pwm, outerArcRect.centerX(), speedTextRect.bottom + speedTextKPHHeight * 3.3f, textPaint)
+            if (WheelLog.AppConfig.hwPwm) {
+                val defaultTextPainColor = textPaint.color
+                val softwarePwm = String.format("%02.0f%% / %02.0f%%",
+                    WheelData.getInstance().softwarePwm,
+                    WheelData.getInstance().softwareMaxPwm,)
+                textPaint.color = getColorEx(R.color.wheelview_versiontext)
+                canvas.drawText(softwarePwm, outerArcRect.centerX(), speedTextRect.bottom + speedTextKPHHeight * 1.7f, textPaint)
+                textPaint.color = defaultTextPainColor
+            }
         } else {
             val metric = if (WheelLog.AppConfig.useMph) resources.getString(R.string.mph) else resources.getString(R.string.kmh)
             canvas.drawText(metric, outerArcRect.centerX(), speedTextRect.bottom + speedTextKPHHeight * 1.7f, textPaint)
@@ -690,7 +699,7 @@ class WheelView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         if (WheelData.getInstance().isConnected) {
             textPaint.textSize = innerArcTextSize
             canvas.save()
-            if (width > height) canvas.rotate(144 + currentBattery * 2.25f - 180, innerArcRect.centerX(), innerArcRect.centerY()) else canvas.rotate(144 + currentBattery * 2.25f - 180, innerArcRect.centerY(), innerArcRect.centerX())
+            if (width > height) canvas.rotate(144 + (currentBattery - 3) * 2.25f - 180, innerArcRect.centerX(), innerArcRect.centerY()) else canvas.rotate(144 + (currentBattery - 3) * 2.25f - 180, innerArcRect.centerY(), innerArcRect.centerX())
             val bestBatteryString = String.format(Locale.US, "%02d%%", mBattery)
             canvas.drawText(bestBatteryString, batteryTextRect.centerX(), batteryTextRect.centerY(), textPaint)
             canvas.restore()
@@ -698,11 +707,18 @@ class WheelView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             /// true battery
             val customPercents = WheelLog.AppConfig.customPercents
             if (WheelLog.AppConfig.useBetterPercents || customPercents) {
-                if (width > height) canvas.rotate(144 + -3.3f * 2.25f - 180, innerArcRect.centerX(), innerArcRect.centerY()) else canvas.rotate(144 + -2 * 2.25f - 180, innerArcRect.centerY(), innerArcRect.centerX())
-                var batteryCalculateType = "true"
-                if (customPercents && !WheelData.getInstance().isVoltageTiltbackUnsupported) batteryCalculateType = "custom"
-                val batteryString = String.format(Locale.US, "%s", batteryCalculateType)
-                canvas.drawText(batteryString, batteryTextRect.centerX(), batteryTextRect.centerY(), textPaint)
+                // Voltage Current
+                if (width > height) canvas.rotate(144 + 38 * 2.25f - 180, innerArcRect.centerX(), innerArcRect.centerY()) else canvas.rotate(144 + 38 * 2.25f - 180, innerArcRect.centerY(), innerArcRect.centerX())
+                val batteryVoltageString = String.format(Locale.US, "%.2f", WheelData.getInstance().avgVoltagePerCell)
+                textPaint.textSize = speedTextKPHSize * 0.45f
+                canvas.drawText(batteryVoltageString, batteryTextRect.centerX(), batteryTextRect.centerY(), textPaint)
+                canvas.restore()
+                canvas.save()
+                // Voltage Sag
+                val batteryVoltageSagString = String.format(Locale.US, "%.2f", WheelData.getInstance().avgVoltagePerCellSag)
+                if (width > height) canvas.rotate(144 + -3.3f * 2.25f - 180, innerArcRect.centerX(), innerArcRect.centerY()) else canvas.rotate(144 + -2.25f * 2.25f - 180, innerArcRect.centerY(), innerArcRect.centerX())
+                canvas.drawText(batteryVoltageSagString, batteryTextRect.centerX(), batteryTextRect.centerY(), textPaint)
+                textPaint.textSize = innerArcTextSize
                 canvas.restore()
                 canvas.save()
             }

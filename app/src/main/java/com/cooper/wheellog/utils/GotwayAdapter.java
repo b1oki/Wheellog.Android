@@ -39,6 +39,10 @@ public class GotwayAdapter extends BaseAdapter {
             if (dataS.startsWith("NAME")) {
                 model = dataS.substring(5).trim();
                 wd.setModel(model);
+            } else if (model.equals("EXN") && dataS.startsWith("GW2002001")) {
+                fw = dataS.substring(2).trim();
+                wd.setVersion(fw);
+                WheelLog.AppConfig.setHwPwm(true);
             } else if (dataS.startsWith("GW")) {
                 fw = dataS.substring(2).trim();
                 wd.setVersion(fw);

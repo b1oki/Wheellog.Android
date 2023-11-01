@@ -102,12 +102,14 @@ object Alarms {
     }
 
     private fun alertedAlarms(pwm: Double, mContext: Context): Boolean {
-        if (pwm > WheelLog.AppConfig.alarmFactor1 / 100.0) {
+        if (pwm > WheelLog.AppConfig.alarmFactor2 / 100.0) {
             AudioUtil.toneDuration =
                 (200 * (pwm - WheelLog.AppConfig.alarmFactor1 / 100.0) / (WheelLog.AppConfig.alarmFactor2 / 100.0 - WheelLog.AppConfig.alarmFactor1 / 100.0)).roundToInt()
             AudioUtil.toneDuration = MathsUtil.clamp(AudioUtil.toneDuration, 20, 200)
             raiseAlarm(ALARM_TYPE.PWM, pwm, mContext)
             return true
+        } else if (pwm > WheelLog.AppConfig.alarmFactor1 / 100.0) {
+            playSound(mContext, R.raw.spin4ev_90_pwm_alarm)
         } else {
             // check if speed alarm executing and stop it
             speedAlarmExecuting.value = false
@@ -116,7 +118,7 @@ object Alarms {
             val warningSpeedPeriod = WheelLog.AppConfig.warningSpeedPeriod * 1000
             if (warningPwm != 0.0 && warningSpeedPeriod != 0 && pwm >= warningPwm && System.currentTimeMillis() - lastPlayWarningSpeedTime > warningSpeedPeriod) {
                 lastPlayWarningSpeedTime = System.currentTimeMillis()
-                playSound(mContext, R.raw.warning_pwm)
+                playSound(mContext, R.raw.spin4ev_80_pwn_alarm)
             } else {
                 val warningSpeed = WheelLog.AppConfig.warningSpeed
                 if (warningSpeed != 0 && warningSpeedPeriod != 0 && WheelData.getInstance().speedDouble >= warningSpeed && System.currentTimeMillis() - lastPlayWarningSpeedTime > warningSpeedPeriod) {
