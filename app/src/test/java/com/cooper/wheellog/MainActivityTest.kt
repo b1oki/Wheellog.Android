@@ -18,8 +18,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 class MainActivityTest {
 
-    lateinit var controller: ActivityController<MainActivity>
-    lateinit var activity: MainActivity
+    private lateinit var controller: ActivityController<MainActivity>
+    private lateinit var activity: MainActivity
 
     @Before
     fun setUp() {
@@ -104,20 +104,6 @@ class MainActivityTest {
 
         // Assert.
         assertThat(shadowActivity.nextStartedActivity).isNull()
-    }
-
-    @Test
-    fun `click on settings menu - launch SettingsActivity`() {
-        // Arrange.
-        val shadowActivity = Shadows.shadowOf(activity)
-
-        // Act.
-        shadowActivity.clickMenuItem(R.id.miSettings)
-
-        // Assert.
-        val intent = shadowActivity.nextStartedActivity
-        val shadowIntent = Shadows.shadowOf(intent)
-        assertThat(SettingsActivity::class.java).isEqualTo(shadowIntent.intentClass)
     }
 
     // All the tests below will fail during the setup phase,

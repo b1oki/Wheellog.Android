@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.cooper.wheellog.R
 import com.cooper.wheellog.databinding.ChartFragmentBinding
-import com.cooper.wheellog.utils.SomeUtil.Companion.getColorEx
+import com.cooper.wheellog.utils.SomeUtil.getColorEx
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -22,7 +22,7 @@ import java.util.*
 
 class StatsFragment: Fragment(), OnChartValueSelectedListener {
 
-    private val timeFormatter = SimpleDateFormat("HH:mm:ss ", Locale.US)
+    private val timeFormatter = SimpleDateFormat("HH:mm:ss", Locale.US)
     private val viewModel: MapViewModel by activityViewModels()
     private lateinit var binding: ChartFragmentBinding
 
@@ -57,7 +57,7 @@ class StatsFragment: Fragment(), OnChartValueSelectedListener {
     private fun initChart(chart: LineChart) {
         chart.apply {
             setDrawGridBackground(false)
-            description.isEnabled = true
+            description.isEnabled = false
             setHardwareAccelerationEnabled(true)
             legend.textColor = getColorEx(android.R.color.white)
             setNoDataText(resources.getString(R.string.no_chart_data))

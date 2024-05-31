@@ -3,21 +3,19 @@ package com.cooper.wheellog
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.os.Build
 import android.view.*
 import android.widget.TextView
 import androidx.gridlayout.widget.GridLayout
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.cooper.wheellog.utils.Constants.WHEEL_TYPE
 import com.cooper.wheellog.utils.FileUtil
 import com.cooper.wheellog.utils.MathsUtil
-import com.cooper.wheellog.utils.SomeUtil.Companion.getColorEx
-import com.cooper.wheellog.utils.StringUtil.Companion.inArray
-import com.cooper.wheellog.utils.StringUtil.Companion.toTempString
+import com.cooper.wheellog.utils.SomeUtil.getColorEx
+import com.cooper.wheellog.utils.StringUtil.inArray
+import com.cooper.wheellog.utils.StringUtil.toTempString
+import com.cooper.wheellog.utils.ThemeManager
 import com.cooper.wheellog.views.TripAdapter
-import com.cooper.wheellog.views.TripModel
 import com.cooper.wheellog.views.WheelView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -128,11 +126,11 @@ class MainPageAdapter(private var pages: MutableList<Int>, val activity: MainAct
             R.layout.main_view_events -> {
                 eventsTextView = view.findViewById(R.id.events_textbox)
                 eventsTextView?.text = logsCashe
-                eventsTextView?.typeface = WheelLog.ThemeManager.getTypeface(view.context)
+                eventsTextView?.typeface = ThemeManager.getTypeface(view.context)
             }
             R.layout.main_view_trips -> {
                 listOfTrips = view.findViewById(R.id.list_trips)
-                listOfTrips?.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+                // listOfTrips?.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
                 listOfTrips?.adapter = TripAdapter(activity, FileUtil.fillTrips(activity))
                 // for Tests
                 // val models = arrayListOf(TripModel("title", "desc", "asd"))
@@ -417,7 +415,7 @@ class MainPageAdapter(private var pages: MutableList<Int>, val activity: MainAct
     private fun createSecondPage() {
         val layout = pagesView[R.layout.main_view_params_list]?.findViewById<GridLayout>(R.id.page_two_grid) ?: return
         layout.removeAllViews()
-        val font = WheelLog.ThemeManager.getTypeface(activity)
+        val font = ThemeManager.getTypeface(activity)
         for ((key, value) in secondPageValues) {
             val headerText = (activity.layoutInflater.inflate(
                 R.layout.textview_title_template, layout, false
@@ -630,7 +628,7 @@ class MainPageAdapter(private var pages: MutableList<Int>, val activity: MainAct
     private fun createSmartBmsPage() {
         val layout = pagesView[R.layout.main_view_smart_bms]?.findViewById<GridLayout>(R.id.page_smart_bms_grid) ?: return
         layout.removeAllViews()
-        val font = WheelLog.ThemeManager.getTypeface(activity)
+        val font = ThemeManager.getTypeface(activity)
         val bat1Text = (activity.layoutInflater.inflate(
                 R.layout.textview_smart_bms_battery_template, layout, false
         ) as TextView).apply {
@@ -716,7 +714,7 @@ class MainPageAdapter(private var pages: MutableList<Int>, val activity: MainAct
         smartBms2PageValues.clear()
         when (WheelData.getInstance().wheelType) {
             WHEEL_TYPE.KINGSONG -> {
-                if (inArray(WheelData.getInstance().model, arrayOf("KS-S20", "KS-S22"))) {
+                if (inArray(WheelData.getInstance().model, arrayOf("KS-S20", "KS-S22", "KS-S19", "KS-S16"))) {
                     addPage(R.layout.main_view_smart_bms, 2)
                     setupFieldForSmartBmsPage(R.string.bmsSn)
                     setupFieldForSmartBmsPage(R.string.bmsFw)
@@ -731,8 +729,10 @@ class MainPageAdapter(private var pages: MutableList<Int>, val activity: MainAct
                     setupFieldForSmartBmsPage(R.string.bmsTemp2)
                     setupFieldForSmartBmsPage(R.string.bmsTemp3)
                     setupFieldForSmartBmsPage(R.string.bmsTemp4)
-                    setupFieldForSmartBmsPage(R.string.bmsTemp5)
-                    setupFieldForSmartBmsPage(R.string.bmsTemp6)
+                    if (inArray(WheelData.getInstance().model, arrayOf("KS-S20", "KS-S22"))) {
+                        setupFieldForSmartBmsPage(R.string.bmsTemp5)
+                        setupFieldForSmartBmsPage(R.string.bmsTemp6)
+                    }
                     setupFieldForSmartBmsPage(R.string.bmsTempMos)
                     setupFieldForSmartBmsPage(R.string.bmsTempMosEnv)
                     setupFieldForSmartBmsPage(R.string.bmsMaxCell)
@@ -758,16 +758,20 @@ class MainPageAdapter(private var pages: MutableList<Int>, val activity: MainAct
                     setupFieldForSmartBmsPage(R.string.bmsCell18)
                     setupFieldForSmartBmsPage(R.string.bmsCell19)
                     setupFieldForSmartBmsPage(R.string.bmsCell20)
-                    setupFieldForSmartBmsPage(R.string.bmsCell21)
-                    setupFieldForSmartBmsPage(R.string.bmsCell22)
-                    setupFieldForSmartBmsPage(R.string.bmsCell23)
-                    setupFieldForSmartBmsPage(R.string.bmsCell24)
-                    setupFieldForSmartBmsPage(R.string.bmsCell25)
-                    setupFieldForSmartBmsPage(R.string.bmsCell26)
-                    setupFieldForSmartBmsPage(R.string.bmsCell27)
-                    setupFieldForSmartBmsPage(R.string.bmsCell28)
-                    setupFieldForSmartBmsPage(R.string.bmsCell29)
-                    setupFieldForSmartBmsPage(R.string.bmsCell30)
+                    if (inArray(WheelData.getInstance().model, arrayOf("KS-S20", "KS-S22", "KS-S19"))) {
+                        setupFieldForSmartBmsPage(R.string.bmsCell21)
+                        setupFieldForSmartBmsPage(R.string.bmsCell22)
+                        setupFieldForSmartBmsPage(R.string.bmsCell23)
+                        setupFieldForSmartBmsPage(R.string.bmsCell24)
+                    }
+                    if (inArray(WheelData.getInstance().model, arrayOf("KS-S20", "KS-S22"))) {
+                        setupFieldForSmartBmsPage(R.string.bmsCell25)
+                        setupFieldForSmartBmsPage(R.string.bmsCell26)
+                        setupFieldForSmartBmsPage(R.string.bmsCell27)
+                        setupFieldForSmartBmsPage(R.string.bmsCell28)
+                        setupFieldForSmartBmsPage(R.string.bmsCell29)
+                        setupFieldForSmartBmsPage(R.string.bmsCell30)
+                    }
                 } else {
                     removePage(R.layout.main_view_smart_bms)
                     return
@@ -826,6 +830,11 @@ class MainPageAdapter(private var pages: MutableList<Int>, val activity: MainAct
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (WheelLog.AppConfig.getResId(key)) {
+            R.string.show_page_graph -> if (WheelLog.AppConfig.pageGraph) {
+                addPage(R.layout.main_view_graph, 2)
+            } else {
+                removePage(R.layout.main_view_graph)
+            }
             R.string.show_page_events -> if (WheelLog.AppConfig.pageEvents) {
                 addPage(R.layout.main_view_events)
             } else {

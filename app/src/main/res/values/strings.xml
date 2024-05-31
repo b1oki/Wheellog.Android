@@ -2,7 +2,11 @@
     <string name="kmh">km/h</string>
     <string name="mph">mph</string>
     <string name="km">km</string>
+    <string name="whkm">Wh/km</string>
+    <string name="whmi">Wh/mi</string>
+    <string name="wh">Wh</string>
     <string name="sec">sec</string>
+    <string name="min">min</string>
     <string name="miles">mi</string>
 
     // Garmin ConnectIQ dialogs
@@ -10,6 +14,7 @@
     <string name="garmin_connectiq_service_unavailable_message">The ConnectIQ service is unavailable.</string>
 
     // Other
+    <string name="today">Today</string>
     <string name="unknown_device">Unknown device</string>
     <string name="ble_not_supported">Bluetooth LE is not supported</string>
     <string name="error_bluetooth_not_supported">Bluetooth is not supported on your device.</string>
@@ -55,6 +60,7 @@
     <string name="distance">Distance</string>
     <string name="wheel_distance">Wheel Distance</string>
     <string name="user_distance">User Distance</string>
+    <string name="consumption">Consumption</string>
     <string name="ride_time">Journey Time</string>
     <string name="riding_time">Ride Time</string>
     <string name="voltage">Voltage</string>
@@ -103,10 +109,12 @@
     <string name="alarm_text_temperature">Temperature alarm triggered</string>
     <string name="alarm_text_pwm">PWM alarm triggered</string>
     <string name="alarm_text_battery">Battery alarm triggered</string>
+    <string name="watch_garmin_group_title">Garmin</string>
     <string name="garmin_connectiq_enable_title">Garmin ConnectIQ</string>
     <string name="garmin_connectiq_enable_description">Enable connectivity to Garmin ConnectIQ</string>
     <string name="garmin_connectiq_use_beta_title">Beta Garmin companion</string>
     <string name="garmin_connectiq_use_beta_description">Use beta Garmin companion instead of a stable one</string>
+    <string name="watch_pebble_group_title">Pebble</string>
     <string name="horn_mode_title">Horn Mode</string>
     <string name="horn_mode_description">Executed when the select button on the Pebble watch is pressed</string>
     <string name="tilt_back_description">Tiltback speed</string>
@@ -182,6 +190,7 @@
     <string name="use_fahrenheit_description">Show temperature in Fahrenheit rather than Celsius</string>
     <string name="view_blocks_title">Info blocks</string>
     <string name="view_blocks_description">Show info blocks below speedometer</string>
+    <string name="pip_block_title">Pip parameter</string>
     <string name="use_eng_alert_title">Restart required</string>
     <string name="use_eng_alert_description">Please restart the application to apply this change</string>
     <string name="use_better_percents_title">Improved percents</string>
@@ -193,7 +202,7 @@
     <string name="use_pip_mode_title">Enable Picture-in-Picture</string>
     <string name="use_pip_mode_description">Use Picture-in-Picture mode instead of going to background</string>
     <string name="current_on_dial_title">Current on main dial</string>
-    <string name="current_on_dial_description">Draw current on main dial instead of speed</string>
+    <string name="current_on_dial_description">Draw current on main dial instead of speed. The numbers will still indicate the speed.</string>
     <string name="connection_sound_title">Connect sound</string>
     <string name="connection_sound_description">Play sound when Wheel connects or disconnects</string>
     <string name="no_connection_sound_title">Connection lost beeps period</string>
@@ -210,14 +219,14 @@
     <string name="connect_beep_description">Sound of connection to the wheel</string>.
     <string name="enable_alarms_title">Enable Alarms</string>
     <string name="enable_alarms_description">Allow the phone to vibrate as a warning</string>
-    <string name="disable_phone_vibrate_title">Disable Phone Vibration</string>
+    <string name="disable_phone_vibration_title">Disable Phone Vibration</string>
     <string name="disable_phone_vibration_description">Phone will not vibrate but the alarm will be passed to a connected Pebble Watch</string>
     <string name="disable_phone_beep_title">Disable Phone Beep</string>
     <string name="disable_phone_beep_description">Phone will not beep but the alarm will be passed to a connected Pebble Watch</string>
     <string name="use_wheel_beep_for_alarm_title">Use Wheel built-in Beep for Alarm</string>
     <string name="use_wheel_beep_for_alarm_description">Alarm will send to an internal beeper instead audio</string>
-    <string name="altered_alarms_title">Altered alarms</string>
-    <string name="altered_alarms_description">Use altered alarms model based on voltage and capabilities of wheel</string>
+    <string name="pwm_based_alarms_title">PWM based alarms</string>
+    <string name="pwm_based_alarms_description">Use PWM based alarms model on voltage and capabilities of wheel</string>
     <string name="altered_alarms_pref_title">Altered alarms options</string>
     <string name="rotation_speed_title">Rotation speed</string>
     <string name="rotation_speed_description">Rotation (lift-up) speed of your wheel</string>
@@ -256,6 +265,8 @@
     <string name="battery_alarm_title">Battery level Alarm</string>
     <string name="battery_title">Battery level</string>
     <string name="alarm_battery_description">Battery level that triggers the alarm</string>
+    <string name="alarm_wheel_title">Wheel Alarm by Wheellog</string>
+    <string name="alarm_wheel_description">Alarm that triggers by wheel alarm</string>
     <string name="speed_axis">speed</string>
     <string name="current_axis">current</string>
     <string name="no_chart_data">No data available</string>
@@ -267,7 +278,7 @@
     <string name="auto_upload_log_title">Auto Upload Logs</string>
     <string name="auto_upload_log_description">Automatically upload log files to Google Drive</string>
     <string name="log_location_title">Log location</string>
-    <string name="log_location_decription">Include location data within the logs</string>
+    <string name="log_location_description">Include location data within the logs</string>
     <string name="use_gps_title">Use GPS for location</string>
     <string name="use_gps_description">Use GPS for location rather than network provider.  GPS is more accurate but may consume more battery power</string>
     <string name="use_raw_title">Write Raw data</string>
@@ -293,10 +304,12 @@
     <string name="is_gotway_mcm_description">If your wheel is Gotway MCM, and it shows wrong speed, distance and others parameters, it should make them normal</string>
     <string name="gw_in_miles_title">Switch controller in Miles</string>
     <string name="gw_in_miles_description">on - Miles, off - Km</string>
+    <string name="auto_voltage_title">Auto detect wheel voltage</string>
+    <string name="auto_voltage_description">If possible, switch off if voltage is irrelevant</string>
     <string name="ks18l_scaler_title">Wrong 18L distanse</string>
     <string name="ks18l_scaler_description">18L use to show wrong distance, WheelLog corrects this number, but if you want to see wrong raw numbers from wheel - check this</string>
     <string name="battery_voltage_title">Battery voltage</string>
-    <string name="battary_voltage_description">67V/84V/100V/116V/134V</string>
+    <string name="battery_voltage_description">67V/84V/100V/116V/134V/168V</string>
     <string name="gotway_negative_title">Negative current and speed mode</string>
     <string name="gotway_negative_description">When you riding straight if speed and currents negative - try change to opposite setting, or choose absolute</string>
     <string name="hw_pwm_title">Use hardware PWM instead of software</string>
@@ -414,6 +427,7 @@
     <string name="email">E-mail</string>
     <string name="show_page_events_description">Show the events page</string>
     <string name="show_page_events_title">Events page</string>
+    <string name="show_page_graph_title">Graph page</string>
     <string name="main_view_category">Main view</string>
     <string name="beep_category">Beep</string>
     <string name="beep_on_single_tap_title">Beep on single tap</string>
@@ -422,9 +436,18 @@
     <string name="beep_on_volume_up_description">The volume buttons will play a beep. Can\'t change the volume in phone.</string>
     <string name="beep_by_wheel_description">Beep by build-in wheel horn</string>
     <string name="beep_by_wheel_title">Beep by wheel</string>
-    <string name="custom_beep_title">Select beep file</string>
+    <string name="use_custom_beep_title">Use phone alarms</string>
+    <string name="custom_beep_title">Alarm is not selected</string>
+    <string name="beep_time_limit_title">Beep time limit</string>
     <string name="bug_report">Bug report</string>
     <string name="donate_title">Donate</string>
+    <string name="donate_crypto">Cryptocurrency</string>
+    <string name="donate_bank_ru">Russian bank</string>
+    <string name="github">Github</string>
+    <string name="github_desc">"Thanks to all contributors."</string>
+    <string name="telegram">Telegram</string>
+    <string name="FAQ">FAQ</string>
+    <string name="about_app_desc">This app is free and open source. It is developed by volunteers in their free time. If you like this app, you can support the project by donating.</string>
     <string name="power_off">Power off</string>
     <string name="reset_trip">Reset trip</string>
     <string name="reset_trip_message">Are you sure you want to reset trip distance on the wheel?</string>
@@ -445,7 +468,7 @@
     <string name="show_page_trips_title">Trips page</string>
     <string name="drl_settings_title">Enable DRL</string>taillight_settings_title
     <string name="taillight_settings_title">Tail light</string>
-    <string name="drl_settings_description_inmo">Enable front O-ring and backlight</string>
+    <string name="drl_settings_description">Enable front O-ring and backlight</string>
     <string name="drl_settings_description_nb">Enable front O-ring</string>
     <string name="taillight_settings_description">Enable or disable tail light</string>
     <string name="light_brightness_title">Light brightness</string>
@@ -495,25 +518,29 @@
     <string name="alarm_text_current_v">[CURRENT] \n  - %1$.0f A</string>
     <string name="alarm_text_temperature_v">[HEAT] \n  - %1$d°C</string>
     <string name="alarm_text_battery_v">[BAT] \n  - %1$d</string>
+    <string name="alarm_text_wheel_v">[WHEEL]</string>
     <string name="notification_buttons_description">Buttons in the notification bar</string>
+    <string name="watch_miband_group_title">Mi Band</string>
     <string name="miband_on_mainscreen_title">Mi Band button on main menu</string>
     <string name="miband_on_mainscreen_description">Show Mi Band button on main screen instead watch button</string>
     <string name="miband_fixrs_title">Mi Band fix for Begode RS/EX</string>
     <string name="miband_fixrs_description">Use this only if have no data updates on Mi Band</string>
     <string name="wearos_pages_title" >WearOs Pages</string>
     <string name="wearos_pages_description">Pages on WearOs</string>
+    <string name="watch_wearos_group_title" >WearOs</string>
     <string name="use_reconnect_title">Use reconnect</string>
     <string name="use_reconnect_description">Autoreconnect to wheel if data freeze (use only if you have problems)</string>
     <string name="use_raw_description">Raw data from wheel written into a separate csv file.</string>
     <string name="private_policy"><![CDATA[Before using the app, you must accept the <a href=\"https://github.com/Wheellog/Wheellog.Android/wiki/Privacy-Policy\">Private policy</a> and <a href=\"https://github.com/Wheellog/Wheellog.Android/wiki/Terms-&-Conditions\">Terms & Conditions</a>]]></string>
     <string name="replace_info_block">Replace \"%s\" to:</string>
-    <string name="auto_log_when_moving_description">Start auto logging only when wheel speed more than 3,5 km/h (2.17 mph).</string>
+    <string name="auto_log_when_moving_description">Start auto logging only when wheel speed more than</string>
     <string name="auto_log_when_moving_title">Start logging when is moving</string>
     <string name="remaining_distance">Remaining distance</string>
     <string name="battery_per_km">Battery per km</string>
     <string name="avg_cell_volt">Avg cell</string>
     <string name="trip_menu_view_map">View map</string>
     <string name="trip_menu_upload_to_ec">Upload to electro.club</string>
+    <string name="trip_menu_open_in_ec">Open in electro.club</string>
     <string name="trip_menu_share">Share</string>
     <string name="trip_menu_delete_file">Delete file</string>
     <string name="trip_menu_delete_file_confirmation">Delete a trip file?</string>
@@ -535,11 +562,17 @@
     <string name="setup_pwm_auto">2. Auto. You need to spin wheel on air.</string>
     <string name="setup_pwm_select_from_template">3. Select from template:</string>
     <string name="send_yandex_metriсa_title">Send usage statistics</string>
-    <string name="send_yandex_metriсa">This application uses the AppMetrica analytics service provided by Yandex. Geolocation is not sent. The information collected in this way will be used to resolve errors and cannot identify you.</string>
+    <string name="send_yandex_metriсa_description">This application uses the AppMetrica analytics service provided by Yandex. Geolocation is not sent. The information collected in this way will be used to resolve errors and cannot identify you.</string>
     <string name="map_map_tab_name">Map</string>
     <string name="map_statistics_tab_name">Stats</string>
     <string name="error_cannot_open_file">Could not open the file.</string>
     <string name="error_inputstream_null">Failed to create inputStream.</string>
     <string name="error_this_file_without_gps">%s file does not contain geolocation data.</string>
     <string name="error_parsing_log">Unexpected exception when parsing file.</string>
+    <string name="gotosettings">Go to Settings</string>
+    <string name="gpsdisabled_alert">GPS is turned off on the phone. The option to use GPS data for log recording is enabled in the settings. Enable gps or disable gps recording setting.</string>
+	<string name="invalid_number">Invalid number</string>
+    <string name="main_menu_buttons_title">Main menu buttons</string>
+    <string name="reset_extremum_values_title">Reset max/min values</string>
+    <string name="show_clock_title">Show the clock on the main screen</string>
 </resources>

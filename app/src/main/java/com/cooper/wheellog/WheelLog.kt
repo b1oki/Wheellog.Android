@@ -1,8 +1,8 @@
 package com.cooper.wheellog
 
 import android.app.Application
-import com.yandex.metrica.YandexMetricaConfig
-import com.yandex.metrica.YandexMetrica
+// import com.yandex.metrica.YandexMetricaConfig
+// import com.yandex.metrica.YandexMetrica
 import com.cooper.wheellog.utils.NotificationUtil
 import com.cooper.wheellog.utils.VolumeKeyController
 import com.cooper.wheellog.utils.ThemeManager
@@ -15,21 +15,21 @@ class WheelLog : Application() {
     override fun onCreate() {
         super.onCreate()
         me = this
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree(), FileLoggingTree(applicationContext))
-        }
+//        if (BuildConfig.DEBUG) {
+//            Timber.plant(Timber.DebugTree(), FileLoggingTree(applicationContext))
+//        }
 
         WheelData.initiate()
 
         // YandexMetrica.
-        if (BuildConfig.metrica_api.isNotEmpty()) {
-            val config = YandexMetricaConfig
-                .newConfigBuilder(BuildConfig.metrica_api)
-                .withLocationTracking(false)
-                .withStatisticsSending(AppConfig.yandexMetricaAccepted)
-                .build()
-            YandexMetrica.activate(applicationContext, config)
-        }
+//        if (BuildConfig.metrica_api.isNotEmpty()) {
+//            val config = YandexMetricaConfig
+//                .newConfigBuilder(BuildConfig.metrica_api)
+//                .withLocationTracking(false)
+//                .withStatisticsSending(AppConfig.yandexMetricaAccepted)
+//                .build()
+//            YandexMetrica.activate(applicationContext, config)
+//        }
     }
 
     override fun attachBaseContext(base: Context) {
@@ -38,7 +38,6 @@ class WheelLog : Application() {
         mContext = LocaleManager.setLocale(mContext)
         Notifications = NotificationUtil(mContext)
         VolumeKeyController = VolumeKeyController(mContext)
-        ThemeManager = ThemeManager()
         super.attachBaseContext(mContext)
     }
 
@@ -57,7 +56,6 @@ class WheelLog : Application() {
         lateinit var AppConfig: AppConfig
         lateinit var Notifications: NotificationUtil
         lateinit var VolumeKeyController: VolumeKeyController
-        lateinit var ThemeManager: ThemeManager
 
         val appContext: Context?
             get() = me?.applicationContext

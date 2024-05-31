@@ -91,7 +91,8 @@ object Constants {
     const val INTENT_EXTRA_NEWS = "wheel_news"
     const val MAX_CELL_VOLTAGE = 4.2
     const val MAIN_NOTIFICATION_ID = 423411
-    const val LOG_FOLDER_NAME = "WheelLog Logs"
+    const val LOG_FOLDER_NAME = "WheelLog"
+    const val LOG_FOLDER_OLD_NAME = "WheelLog Logs"
 
     enum class WHEEL_TYPE {
         Unknown, KINGSONG, GOTWAY, NINEBOT, NINEBOT_Z, INMOTION, INMOTION_V2, VETERAN, GOTWAY_VIRTUAL
@@ -109,6 +110,7 @@ object Constants {
         CURRENT(4),
         TEMPERATURE(5),
         PWM(6),
-        BATTERY(7);
+        BATTERY(7),
+        WHEEL(8);
     }
 }

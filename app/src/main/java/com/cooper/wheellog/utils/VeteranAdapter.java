@@ -5,6 +5,7 @@ import com.cooper.wheellog.WheelLog;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Locale;
+import java.util.zip.CRC32;
 import timber.log.Timber;
 
 public class VeteranAdapter extends BaseAdapter {
@@ -28,6 +29,7 @@ public class VeteranAdapter extends BaseAdapter {
             if (unpacker.addChar(c)) {
                 byte[] buff = unpacker.getBuffer();
                 Boolean useBetterPercents = WheelLog.AppConfig.getUseBetterPercents();
+                Boolean hwPwmEnabled = WheelLog.AppConfig.getHwPwm();
                 int veteranNegative = Integer.parseInt(WheelLog.AppConfig.getGotwayNegative());
                 int voltage = MathsUtil.shortFromBytesBE(buff,4);
                 int speed = MathsUtil.signedShortFromBytesBE(buff,6) * 10;
@@ -47,25 +49,67 @@ public class VeteranAdapter extends BaseAdapter {
                 int hwPwm = MathsUtil.shortFromBytesBE(buff, 34);
 
                 int battery;
-                if (useBetterPercents) {
-                    if (voltage > 10020) {
-                        battery = 100;
-                    } else if (voltage > 8160) {
-                        battery = (int) Math.round((voltage - 8070) / 19.5);
-                    } else if (voltage > 7935) {
-                        battery = (int) Math.round((voltage - 7935) / 48.75);
+                if (mVer < 4) { // not Patton
+                    if (useBetterPercents) {
+                        if (voltage > 10020) {
+                            battery = 100;
+                        } else if (voltage > 8160) {
+                            battery = (int) Math.round((voltage - 8070) / 19.5);
+                        } else if (voltage > 7935) {
+                            battery = (int) Math.round((voltage - 7935) / 48.75);
+                        } else {
+                            battery = 0;
+                        }
                     } else {
-                        battery = 0;
+                        if (voltage <= 7935) {
+                            battery = 0;
+                        } else if (voltage >= 9870) {
+                            battery = 100;
+                        } else {
+                            battery = (int) Math.round((voltage - 7935) / 19.5);
+                        }
                     }
-                } else {
-                    if (voltage <= 7935) {
-                        battery = 0;
-                    } else if (voltage >= 9870) {
-                        battery = 100;
+                } else if (mVer == 4) { // Patton
+                    if (useBetterPercents) {
+                        if (voltage > 12525) {
+                            battery = 100;
+                        } else if (voltage > 10200) {
+                            battery = (int) Math.round((voltage - 9975) / 25.5);
+                        } else if (voltage > 9600) {
+                            battery = (int) Math.round((voltage - 9600) / 67.5);
+                        } else {
+                            battery = 0;
+                        }
                     } else {
-                        battery = (int) Math.round((voltage - 7935) / 19.5);
+                        if (voltage <= 9918) {
+                            battery = 0;
+                        } else if (voltage >= 12337) {
+                            battery = 100;
+                        } else {
+                            battery = (int) Math.round((voltage - 9918) / 24.2);
+                        }
                     }
-                }
+                } else if (mVer == 5) { // Lynx
+                    if (useBetterPercents) {
+                        if (voltage > 15030) {
+                            battery = 100;
+                        } else if (voltage > 12240) {
+                            battery = (int) Math.round((voltage - 11970) / 30.6);
+                        } else if (voltage > 11520) {
+                            battery = (int) Math.round((voltage - 11520) / 81);
+                        } else {
+                            battery = 0;
+                        }
+                    } else {
+                        if (voltage <= 11902) {
+                            battery = 0;
+                        } else if (voltage >= 14805) {
+                            battery = 100;
+                        } else {
+                            battery = (int) Math.round((voltage - 11902) / 29.03);
+                        }
+                    }
+                } else battery = 1; // for new wheels, set 1% by default
 
                 if (veteranNegative == 0) {
                     speed = Math.abs(speed);
@@ -82,14 +126,18 @@ public class VeteranAdapter extends BaseAdapter {
                 wd.setTotalDistance(totalDistance);
                 wd.setTemperature(temperature);
                 wd.setPhaseCurrent(phaseCurrent);
-                wd.setCurrent(phaseCurrent);
                 wd.setVoltage(voltage);
-                wd.setVoltageSag(voltage);
                 wd.setBatteryLevel(battery);
                 wd.setChargingStatus(chargeMode);
                 wd.setAngle(pitchAngle/100.0);
-                wd.setOutput(hwPwm);
-                wd.updateRideTime();
+                if (hwPwmEnabled) {
+                    wd.setOutput(hwPwm);
+                    wd.updatePwm();
+                } else {
+                    wd.calculatePwm();
+                }
+                wd.calculateCurrent();
+                wd.calculatePower();
                 newDataFound = true;
             }
         }
@@ -146,12 +194,23 @@ public class VeteranAdapter extends BaseAdapter {
 
     @Override
     public int getCellsForWheel() {
-        return 24;
+        if (mVer == 5) {
+            return 36;
+        } else if (mVer == 4) {
+            return 30;
+        } else {
+            return 24;
+        }
     }
 
     @Override
     public void wheelBeep() {
-        WheelData.getInstance().bluetoothCmd("b".getBytes());
+        if (mVer < 3) {
+            WheelData.getInstance().bluetoothCmd("b".getBytes());
+        } else {
+            WheelData.getInstance().bluetoothCmd(new byte[]{ 0x4c, 0x6b, 0x41, 0x70, 0x0e, 0x00, (byte) 0x80,(byte) 0x80,(byte) 0x80, 0x01,(byte) 0xca,(byte) 0x87,(byte) 0xe6, 0x6f});
+        }
+
     }
 
     static class veteranUnpacker {
@@ -182,7 +241,7 @@ public class VeteranAdapter extends BaseAdapter {
                 case collecting:
 
                     int bsize = buffer.size();
-                    if (((bsize == 22 || bsize == 30) && (c != 0x00)) || ((bsize == 23) && ((c & 0xFE) != 0x00)) || ((bsize == 31) && ((c & 0xFC) != 0x00))) {
+                    if (((bsize == 22 || bsize == 30) && (c != 0x00)) || ((bsize == 23) && ((c & 0xFE) != 0x00)) ) {
                         state = UnpackerState.done;
                         Timber.i("Data verification failed");
                         reset();
@@ -194,7 +253,21 @@ public class VeteranAdapter extends BaseAdapter {
                         Timber.i("Len %d", len);
                         Timber.i("Step reset");
                         reset();
-                        return true;
+                        if (len > 38) { // new format with crc32
+                            CRC32 crc = new CRC32();
+                            crc.update(getBuffer(), 0, len);
+                            long calc_crc = crc.getValue();
+                            long provided_crc = MathsUtil.intFromBytesBE(getBuffer(), len);
+                            if (calc_crc == provided_crc) {
+                                Timber.i("CRC32 ok");
+                                return true;
+                            } else {
+                                Timber.i("CRC32 fail");
+                                return false;
+                            }
+                        }
+                        return true; // old format without crc32
+
                     }
                     break;
 

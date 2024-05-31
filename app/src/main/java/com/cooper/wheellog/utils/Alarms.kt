@@ -11,7 +11,7 @@ import com.cooper.wheellog.WheelData
 import com.cooper.wheellog.WheelLog
 import com.cooper.wheellog.utils.AudioUtil.playAlarm
 import com.cooper.wheellog.utils.Constants.ALARM_TYPE
-import com.cooper.wheellog.utils.SomeUtil.Companion.playSound
+import com.cooper.wheellog.utils.SomeUtil.playSound
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
@@ -23,6 +23,7 @@ object Alarms {
     private var currentAlarmExecuting = TempBoolean().apply { timeToResetToDefault = 170 }
     private var temperatureAlarmExecuting = TempBoolean().apply { timeToResetToDefault = 570 }
     private var batteryAlarmExecuting = TempBoolean().apply { timeToResetToDefault = 970 }
+    private var wheelAlarmExecuting = TempBoolean().apply { timeToResetToDefault = 170 }
     private var lastPlayWarningSpeedTime = System.currentTimeMillis()
     private var alarmTimer: Timer? = null
     private const val checkPeriod: Long = 200
@@ -56,6 +57,9 @@ object Alarms {
             if (batteryAlarmExecuting.value) {
                 alarm = alarm or 0x08
             }
+            if (wheelAlarmExecuting.value) {
+                alarm = alarm or 0x10
+            }
             return alarm
         }
 
@@ -87,7 +91,7 @@ object Alarms {
     }
 
     private fun reCheckAlarm(pwm: Double, mContext: Context): Boolean {
-        val executed = if (WheelLog.AppConfig.alteredAlarms) {
+        val executed = if (WheelLog.AppConfig.pwmBasedAlarms) {
             alertedAlarms(pwm, mContext)
         } else {
             oldAlarms(mContext)
@@ -95,6 +99,7 @@ object Alarms {
                 || currentAlarms(mContext)
                 || temperatureAlarms(mContext)
                 || batteryAlarms(mContext)
+                || wheelAlarms(mContext)
         if (executed && !isStarted) {
             start()
         }
@@ -211,6 +216,22 @@ object Alarms {
         return batteryAlarmExecuting.value
     }
 
+    private fun wheelAlarms(mContext: Context): Boolean {
+        if (wheelAlarmExecuting.value) {
+            return true
+        }
+        val alarmWheel = WheelLog.AppConfig.alarmWheel
+        if (alarmWheel && WheelData.getInstance().wheelAlarm) {
+            raiseAlarm(
+                    ALARM_TYPE.WHEEL,
+                    WheelData.getInstance().calculatedPwm,
+                    mContext
+                )
+                wheelAlarmExecuting.value = true
+            }
+        return wheelAlarmExecuting.value
+    }
+
     private fun raiseAlarm(alarmType: ALARM_TYPE, value: Double, mContext: Context) {
         val intent = Intent(Constants.ACTION_ALARM_TRIGGERED)
         intent.putExtra(Constants.INTENT_EXTRA_ALARM_TYPE, alarmType)
@@ -223,7 +244,7 @@ object Alarms {
             ALARM_TYPE.CURRENT -> longArrayOf(0, 50, 50, 50, 50)
             ALARM_TYPE.TEMPERATURE -> longArrayOf(0, 500, 500)
             ALARM_TYPE.BATTERY -> longArrayOf(0, 100, 500)
-
+            ALARM_TYPE.WHEEL -> longArrayOf(0, 50, 50)
         }
         if (!WheelLog.AppConfig.disablePhoneVibrate) {
             vibrate(mContext, pattern)
@@ -267,13 +288,18 @@ object Alarms {
                             mContext.getString(R.string.alarm_text_battery_v),
                             WheelData.getInstance().batteryLevel
                     )
+                ALARM_TYPE.WHEEL ->
+                    String.format(
+                            Locale.US,
+                            mContext.getString(R.string.alarm_text_wheel_v)
+                    )
             }
             WheelLog.Notifications.alarmText = miText
             WheelLog.Notifications.update()
         }
     }
 
-    private fun vibrate(mContext: Context, pattern: LongArray) {
+    fun vibrate(mContext: Context, pattern: LongArray) {
         val vib = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager =
                 mContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager

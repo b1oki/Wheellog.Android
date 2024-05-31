@@ -11,17 +11,18 @@ The following manufacturers are supported:
 - Veteran
 - Ninebot Zx, S2, C/P/E+, Mini
 
-| <img src='https://user-images.githubusercontent.com/27482193/95566187-ea8d5580-0a29-11eb-8182-329764d572b7.png' width=400 /> | <img src='https://user-images.githubusercontent.com/27482193/114169041-bdb6ee00-9939-11eb-8fb9-f07b9eac1b2f.png' width=400 /> |
-|--|--|
+| <img src='https://github.com/Wheellog/Wheellog.Android/assets/27482193/2dd0d43b-53a6-4dc4-9794-ddee620628bb' width=400 /> | <img src='https://user-images.githubusercontent.com/27482193/114169041-bdb6ee00-9939-11eb-8fb9-f07b9eac1b2f.png' width=400 /> | <img src='https://github.com/Wheellog/Wheellog.Android/assets/27482193/d7fb7006-1ab3-4ca1-be9f-8d59ec88e376' width=400 />
+|--|--|--|
 
 ## Contributing
 
 ### 🛠️ Pull requests
 A pull request is a way to suggest changes in this repository. We accept pull requests in the `master` branch.
 
-## Google Play
+## App stores
 
- [![google-play-badge](https://user-images.githubusercontent.com/27482193/106334502-d781e800-629b-11eb-8b9b-cb47a32682da.png)](https://play.google.com/store/apps/details?id=com.cooper.wheellog)
+ [![google-play-badge](http://github.com/Wheellog/Wheellog.Android/assets/27482193/8cc988b8-d5af-4c3f-a87a-9cd2c72f4b65)](https://play.google.com/store/apps/details?id=com.cooper.wheellog)
+ [![huawei-app-gallery](http://github.com/Wheellog/Wheellog.Android/assets/27482193/bbf2dbea-95cf-465e-9244-ba12e9aa2fe0)](https://appgallery.huawei.com/#/app/C109077151)
 
 ## ⌚ Smart watch applications
 

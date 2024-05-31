@@ -10,7 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.cooper.wheellog.R
 import com.cooper.wheellog.WheelLog
 
-class ThemeManager {
+object ThemeManager {
 
     private val original = HashMap<ThemeIconEnum, Int>()
     private val ajdm = HashMap<ThemeIconEnum, Int>()
@@ -91,6 +91,7 @@ class ThemeManager {
         original[ThemeIconEnum.SettingsCalibration] = R.drawable.ic_baseline_calibration_24
         original[ThemeIconEnum.SettingsLanguage] = R.drawable.ic_baseline_translate_24
         original[ThemeIconEnum.SettingsAutoLog] = R.drawable.ic_baseline_magic_log_24
+        original[ThemeIconEnum.SettingsLocation] = R.drawable.ic_baseline_location_on_24
         original[ThemeIconEnum.SettingsBlocks] = R.drawable.ic_baseline_dashboard_customize_24
         original[ThemeIconEnum.SettingsNotification] = R.drawable.ic_notification
         original[ThemeIconEnum.SettingsPageEvents] = R.drawable.ic_baseline_event_note_24
@@ -106,11 +107,12 @@ class ThemeManager {
         ajdm[ThemeIconEnum.SettingsWheel] = R.drawable.ajdm_wheel_set
         ajdm[ThemeIconEnum.SettingsTrips] = R.drawable.ajdm_trip
         // trip page
-        original[ThemeIconEnum.TripsPopupButton] = R.drawable.ic_arrow_drop_down_circle_24
+        original[ThemeIconEnum.TripsPopupButton] = R.drawable.ic_baseline_settings_24
         original[ThemeIconEnum.TripsMap] = R.drawable.ic_baseline_map_24
         original[ThemeIconEnum.TripsUpload] = R.drawable.ic_baseline_cloud_upload_24
         original[ThemeIconEnum.TripsShare] = R.drawable.ic_baseline_share_24
         original[ThemeIconEnum.TripsDelete] = R.drawable.ic_baseline_delete_24
+        original[ThemeIconEnum.TripsOpenEc] = R.drawable.ic_baseline_open_in_new_24
         ajdm[ThemeIconEnum.TripsUpload] = R.drawable.ajdm_cloud
         ajdm[ThemeIconEnum.TripsShare] = R.drawable.ajdm_share
     }

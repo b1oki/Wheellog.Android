@@ -78,6 +78,7 @@ public class WheelData {
     private int mVoltageSag;
     private int mFanStatus;
     private int mChargingStatus;
+    private boolean mWheelAlarm = false;
     private boolean mConnectionState = false;
     private String mName = "Unknown";
     private String mModel = "Unknown";
@@ -190,7 +191,7 @@ public class WheelData {
 //        WheelLog.AppConfig.setAlarm1Speed(1);
 //        WheelLog.AppConfig.setAlarm1Battery(70);
 //        WheelLog.AppConfig.setAlarmFactor1(10_00);
-        WheelLog.AppConfig.setAlteredAlarms(false);
+        WheelLog.AppConfig.setPwmBasedAlarms(false);
     }
     /////
 
@@ -790,6 +791,19 @@ public class WheelData {
     public void setPower(int value) {
         mPower = value;
         setMaxPower(value);
+        Calculator.INSTANCE.pushPower(getPowerDouble(), getDistance());
+    }
+
+    public void setWheelAlarm(boolean value) {
+        mWheelAlarm = value;
+    }
+
+    public boolean getWheelAlarm() {
+        return mWheelAlarm;
+    }
+
+    public void calculatePower() {
+        setPower((int) Math.round(getCurrentDouble() * mVoltage));
     }
 
     public double getCurrentDouble() {
@@ -803,6 +817,10 @@ public class WheelData {
     public void setCurrent(int value) {
         mCurrent = value;
         setMaxCurrent(value);
+    }
+
+    public void calculateCurrent() {
+        setCurrent((int) Math.round(mCalculatedPwm * mPhaseCurrent));
     }
 
     public int getCurrent() {
@@ -885,9 +903,17 @@ public class WheelData {
         mMaxPower = 0;
     }
 
+    public void resetExtremumValues() {
+        resetMaxValues();
+        mBatteryLowest = 101;
+    }
+
     public void resetVoltageSag() {
         Timber.i("Sag WD");
         mVoltageSag = 20000;
+        if (getBluetoothService() != null) {
+            getBluetoothService().getApplicationContext().sendBroadcast(new Intent(Constants.ACTION_PREFERENCE_RESET));
+        }
     }
 
     public double getDistanceDouble() {
@@ -953,7 +979,7 @@ public class WheelData {
 
     public void setCurrentTime(int currentTime) {
         if (mRideTime > (currentTime + TIME_BUFFER))
-            mLastRideTime += mRideTime;
+            mLastRideTime = mRideTime;
         mRideTime = currentTime;
     }
 
@@ -962,9 +988,9 @@ public class WheelData {
             mTopSpeed = topSpeed;
     }
 
-    public void setVoltageSag(int voltSag) {
-        if ((voltSag < mVoltageSag) && (voltSag > 0))
-            mVoltageSag = voltSag;
+    public void updateVoltageSag() {
+        if ((mVoltage < mVoltageSag) && (mVoltage > 0))
+            mVoltageSag = mVoltage;
     }
 
     public int getVoltageSag() {
@@ -981,6 +1007,19 @@ public class WheelData {
         if ((temp > mMaxTemp) && (temp > 0))
             mMaxTemp = temp;
 
+    }
+
+    public void updatePwm() {
+        mCalculatedPwm = (double) mOutput / 10000.0;
+        setMaxPwm(mCalculatedPwm);
+    }
+
+    public void calculatePwm() {
+        double rotationSpeed = WheelLog.AppConfig.getRotationSpeed() / 10d;
+        double rotationVoltage = WheelLog.AppConfig.getRotationVoltage() / 10d;
+        double powerFactor = WheelLog.AppConfig.getPowerFactor() / 100d;
+        mCalculatedPwm = mSpeed / (rotationSpeed / rotationVoltage * mVoltage * powerFactor);
+        setMaxPwm(mCalculatedPwm);
     }
 
     public void setBatteryLevel(int battery) {
@@ -1018,23 +1057,8 @@ public class WheelData {
         resetRideTime();
         updateRideTime();
         setTopSpeed(mSpeed);
-        setVoltageSag(mVoltage);
+        updateVoltageSag();
         setMaxTemp(mTemperature);
-        if ((mWheelType == WHEEL_TYPE.KINGSONG) || (mWheelType == WHEEL_TYPE.INMOTION_V2) || WheelLog.AppConfig.getHwPwm()) {
-            mCalculatedPwm = (double) mOutput / 10000.0;
-        } else {
-            double rotationSpeed = WheelLog.AppConfig.getRotationSpeed() / 10d;
-            double rotationVoltage = WheelLog.AppConfig.getRotationVoltage() / 10d;
-            double powerFactor = WheelLog.AppConfig.getPowerFactor() / 100d;
-            mCalculatedPwm = mSpeed / (rotationSpeed / rotationVoltage * mVoltage * powerFactor);
-        }
-        setMaxPwm(mCalculatedPwm);
-        if (mWheelType == WHEEL_TYPE.GOTWAY || mWheelType == WHEEL_TYPE.VETERAN) {
-            setCurrent((int) Math.round(mCalculatedPwm * mPhaseCurrent));
-        }
-        if (mWheelType != WHEEL_TYPE.INMOTION_V2) {
-            setPower((int) Math.round(getCurrentDouble() * mVoltage));
-        }
 
         Intent intent = new Intent(Constants.ACTION_WHEEL_DATA_AVAILABLE);
 
@@ -1169,6 +1193,7 @@ public class WheelData {
         rideStartTime = 0;
         mStartTotalDistance = 0;
         protoVer = "";
+        mWheelAlarm = false;
         mWheelIsReady = false;
     }
 
@@ -1184,7 +1209,7 @@ public class WheelData {
         }
         Timber.i("ProtoVer %s, adv: %s", protoVer, advData );
         boolean detected_wheel = false;
-        String text = StringUtil.Companion.getRawTextResource(mContext, servicesResId);
+        String text = StringUtil.getRawTextResource(mContext, servicesResId);
         if (mBluetoothService == null) {
             Timber.wtf("[error] BluetoothService is null. The wheel could not be detected.");
             return false;

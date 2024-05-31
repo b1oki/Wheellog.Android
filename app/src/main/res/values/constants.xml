@@ -6,7 +6,6 @@
     <string name="watch_preferences" translatable="false">watch_preferences</string>
     <string name="wheel_settings" translatable="false">wheel_settings</string>
     <string name="trip_settings" translatable="false">trip_settings</string>
-    <string name="donate" translatable="false">donate</string>
 
     // ALARM PREFERENCES
     <string name="alarms_enabled" translatable="false">alarms_enabled</string>
@@ -25,6 +24,7 @@
     <string name="alarm_3_battery" translatable="false">alarm_3_battery</string>
     <string name="alarm_current" translatable="false">alarm_current</string>
     <string name="alarm_battery" translatable="false">alarm_battery</string>
+    <string name="alarm_wheel" translatable="false">alarm_wheel</string>
     <string name="alarm_temperature" translatable="false">alarm_temperature</string>
     <string name="altered_alarms" translatable="false">altered_alarms</string>
     <string name="rotation_speed" translatable="false">rotation_speed</string>
@@ -40,7 +40,6 @@
     <string name="use_short_pwm" translatable="false">use_short_pwm</string>
 
     // WHEEL SETTINGS
-    <string name="no_settings" translatable="false">no_settings</string>
     <string name="light_enabled" translatable="false">light_enabled</string>
     <string name="led_enabled" translatable="false">led_enabled</string>
     <string name="handle_button_disabled" translatable="false">handle_button_disabled</string>
@@ -91,7 +90,7 @@
 
     // LOG PREFERENCES
     <string name="auto_log" translatable="false">auto_log</string>
-    <string name="auto_log_when_moving" translatable="false">auto_log_when_moving</string>
+    <string name="auto_log_when_moving_more" translatable="false">auto_log_when_moving_more</string>
     <string name="continue_this_day_log" translatable="false">continue_this_day_log</string>
     <string name="continue_this_day_log_exception" translatable="false">continue_this_day_log_exception</string>
     <string name="auto_upload_ec" translatable="false">auto_upload_ec</string>
@@ -125,6 +124,7 @@
     <string name="max_speed" translatable="false">max_speed</string>
     <string name="use_ratio" translatable="false">use_ratio</string>
     <string name="gw_in_miles" translatable="false">gw_in_miles</string>
+    <string name="auto_voltage" translatable="false">auto_voltage</string>
     <string name="beep_on_single_tap" translatable="false">beep_on_single_tap</string>
     <string name="beep_on_volume_up" translatable="false">beep_on_volume_up</string>
     <string name="beep_by_wheel" translatable="false">beep_by_wheel</string>
@@ -135,6 +135,8 @@
     <string name="use_detect_battery_optimization" translatable="false">use_detect_battery_optimization</string>
     <string name="show_page_trips" translatable="false">show_page_trips</string>
     <string name="use_reconnect" translatable="false">use_reconnect</string>
+    <string name="persent" translatable="false">%</string>
+    <string name="degree" translatable="false">°</string>
 
     // WATCH PREFERENCES
     <string name="horn_mode" translatable="false">horn_mode</string>
@@ -149,8 +151,9 @@
     <string name="profile_name" translatable="false">profile_name</string>
     <string name="about" translatable="false">about</string>
 
-
+    <string name="pip_block" translatable="false">pip_block</string>
     <string name="view_blocks_string" translatable="false">view_blocks_string</string>
+    <string name="show_page_graph" translatable="false">show_page_graph</string>
     <string name="show_page_events" translatable="false">show_page_events</string>
     <string name="notification_buttons" translatable="false">notification_buttons</string>
     <string name="miband_mode" translatable="false">miband_mode</string>
