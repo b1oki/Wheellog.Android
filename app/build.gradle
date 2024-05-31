@@ -20,8 +20,8 @@ android {
         applicationId "com.cooper.wheellog"
         minSdk 21
         targetSdk 34
-        versionCode 122
-        versionName "b1oki.3.1.4b"
+        versionCode 124
+        versionName "b1oki.3.1.8b"
         buildConfigField 'String', 'BUILD_TIME', "\"" + new Date().format('HH:mm dd.MM.yyyy') + "\""
         buildConfigField 'String', 'BUILD_DATE', "\"" + new Date().format('dd.MM.yyyy') + "\""
         vectorDrawables.useSupportLibrary = true
@@ -80,6 +80,7 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            returnDefaultValues = true
         }
         unitTests.all {
             jvmArgs '-Xmx2g'
